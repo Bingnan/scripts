@@ -110,6 +110,7 @@ function get()
 function uz()
 {
     ECHO INFO "[$0]:$@"
+    yum -y install file
     ftype=`file "$1"`   # Note ' and ` is different
     case "$ftype" in
     "$1: Zip archive"*)
@@ -191,6 +192,7 @@ function nginx()
 
     patch -p1 < ../nginx_upstream_check_module-master/check_1.7.5+.patch 
     ./configure --prefix=/usr/local/nginx --with-http_ssl_module --with-http_flv_module --with-http_mp4_module --add-module=../nginx-rtmp-module-master --add-module=../nginx_mod_h264_streaming-2.2.7 --with-ld-opt="-Wl,-rpath,$LUAJIT_LIB" --add-module=../ngx_devel_kit-master --add-module=../lua-nginx-module-master --add-module=../nginx_upstream_check_module-master --with-debug
+    sed -i 's/-Werror//' ./objs/Makefile
     make -j$CORES && make install
     mkdir -p /usr/local/nginx/html/nginx-rtmp-module
     cp $CURDIR/nginx-rtmp-module-master/test/ /usr/local/nginx/html/nginx-rtmp-module/test -r
